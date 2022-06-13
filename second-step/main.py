@@ -6,44 +6,52 @@ from pydantic import BaseModel
 class ItemDataModel(BaseModel):
 	data: str
 
+# Fast API のインスタンス
 app = FastAPI()
+
+# データベース接続
 db = MongoClient('mongo', 27017).sample_db
 
-@app.get("/")
+# webサーバの動作確認
+@app.get('/')
 async def health():
-	return "ok"
+	return 'ok'
 
-@app.get("/items")
+# 登録されているアイテムのリストを取得する
+@app.get('/items')
 async def list_items():
 	posts = {}
 	for post in db.posts.find():
 		posts[str(post['id'])] = post['data']
 	return posts
 
-@app.get("/items/{item_id}")
-async def get_item(item_id: str):
-	item = db.posts.find_one({"id": item_id})
+# アイテムを取得する
+@app.get('/items/{item_id}')
+async def read_item(item_id: str):
+	item = db.posts.find_one({'id': item_id})
 	return {
 		'id': item['id'],
 		'data': item['data']
 	}
 
-@app.post("/items/{item_id}")
-async def post_item(item_id: str, item: ItemDataModel):
+# アイテムを追加する
+@app.post('/items/{item_id}')
+async def create_item(item_id: str, item: ItemDataModel):
 	post = {
 		'id': item_id,
 		'data': item.data
 	}
 	post_id = db.posts.insert_one(post).inserted_id
-	return {
-		'message': 'ok'
-	}
+	return 'create ok'
 
-@app.put("/items/{item_id}")
-async def put_item(item_id: str, item: ItemDataModel):
-	return post_item(item_id, item)
+# アイテムを更新する
+@app.put('/items/{item_id}')
+async def pudate_item(item_id: str, item: ItemDataModel):
+	db.posts.update_one({'id': item_id}, {'$set': {'data': item.data}})
+	return 'update ok'
 
-@app.delete("/items/{item_id}")
+# アイテムを削除する
+@app.delete('/items/{item_id}')
 async def delete_item(item_id: str):
-	return db.posts.delete_one({"id": item_id})
-
+	db.posts.delete_one({'id': item_id})
+	return 'delete ok'
