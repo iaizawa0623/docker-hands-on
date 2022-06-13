@@ -1,6 +1,13 @@
-version: "2"
+version: "3"
 services:
-  db:
-    image: mongo
   web:
     build: .
+    depends_on:
+      - mongo
+    #command: uvicorn main:app --reload --host 0.0.0.0 --port 80
+    ports:
+      - 80:80
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
