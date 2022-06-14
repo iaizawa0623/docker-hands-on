@@ -1,14 +1,17 @@
 # ベースイメージの指定
-FROM ubuntu
+FROM python:3.10.5
 
 # 作業フォルダの指定
 WORKDIR /
 
-# 実行環境を構築
-RUN apt update -y && apt install python3 -y
+# プログラムと依存関係パッケージファイルをコピー
+COPY main.py requirements.txt /
 
-# プログラムをコピー
-COPY app.py index.html /
+# 依存関係パッケージをインストール
+RUN pip install -r /requirements.txt
+
+# 開放ポートを明示
+EXPOSE 80
 
 # アプリを実行
-ENTRYPOINT [ "python3", "/app.py" ]
+ENTRYPOINT [ "python3", "main.py" ]
