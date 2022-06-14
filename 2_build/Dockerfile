@@ -1,17 +1,14 @@
-# ベースイメージを指定
-FROM python:3.10.5
+# ベースイメージの指定
+FROM ubuntu
 
-# 作業フォルダを指定
+# 作業フォルダの指定
 WORKDIR /
 
-# プログラムと依存関係パッケージファイルをコピー
-COPY main.py requirements.txt /
+# 実行環境を構築
+RUN apt update -y && apt install python3 -y
 
-# 依存関係パッケージをインストール
-RUN pip install -r /requirements.txt
+# プログラムをコピー
+COPY app.py index.html /
 
-# 開放ポートを明示
-EXPOSE 80
-
-# プログラムを実行
-CMD [ "uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "80" ]
+# アプリを実行
+ENTRYPOINT [ "python3", "/app.py" ]
