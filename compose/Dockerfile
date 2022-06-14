@@ -8,7 +8,7 @@ WORKDIR /
 COPY app/ /
 
 # 依存関係パッケージをインストール
-RUN pip install -r /requirements.txt
+RUN pip install -r requirements.txt
 
 # 開放ポートを明示
 EXPOSE 80

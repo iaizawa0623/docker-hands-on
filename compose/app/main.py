@@ -5,23 +5,22 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from pymongo import MongoClient
 
-# データモデル
 class ItemDataModel(BaseModel):
 	data: str
 
-# Fast API のインスタンス
-app = FastAPI()
+class MessageDataModel(BaseModel):
+	message: str
 
-# データベース接続
+app = FastAPI()
 db = MongoClient('mongo', 27017).sample_db
 
 # webサーバの動作確認
-@app.get('/')
+@app.get('/', response_model=MessageDataModel)
 async def health():
-	return 'ok'
+	return MessageDataModel(message="ok")
 
 # 登録されているアイテムのリストを取得する
-@app.get('/items')
+@app.get('/items', response_model=dict())
 async def list_items():
 	posts = {}
 	for post in db.posts.find():
@@ -38,26 +37,26 @@ async def read_item(item_id: str):
 	}
 
 # アイテムを追加する
-@app.post('/items/{item_id}')
+@app.post('/items/{item_id}', response_model=MessageDataModel)
 async def create_item(item_id: str, item: ItemDataModel):
 	post = {
 		'id': item_id,
 		'data': item.data
 	}
 	post_id = db.posts.insert_one(post).inserted_id
-	return 'create ok'
+	return MessageDataModel(message="create ok")
 
 # アイテムを更新する
-@app.put('/items/{item_id}')
+@app.put('/items/{item_id}', response_model=MessageDataModel)
 async def pudate_item(item_id: str, item: ItemDataModel):
 	db.posts.update_one({'id': item_id}, {'$set': {'data': item.data}})
-	return 'update ok'
+	return MessageDataModel(message="update ok")
 
 # アイテムを削除する
-@app.delete('/items/{item_id}')
+@app.delete('/items/{item_id}', response_model=MessageDataModel)
 async def delete_item(item_id: str):
 	db.posts.delete_one({'id': item_id})
-	return 'delete ok'
+	return MessageDataModel(message="delete ok")
 
 # ASGI サーバを起動
 if __name__ == "__main__":
