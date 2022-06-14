@@ -1,5 +1,5 @@
 # ベースイメージを指定
-FROM python:3.10.5
+FROM python:3.10.5-apline
 
 # 作業フォルダを指定
 WORKDIR /
