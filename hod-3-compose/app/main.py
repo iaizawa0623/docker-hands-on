@@ -48,7 +48,7 @@ async def create_item(item_id: str, item: ItemDataModel):
 
 # アイテムを更新する
 @app.put('/items/{item_id}', response_model=MessageDataModel)
-async def pudate_item(item_id: str, item: ItemDataModel):
+async def update_item(item_id: str, item: ItemDataModel):
 	db.posts.update_one({'id': item_id}, {'$set': {'data': item.data}})
 	return MessageDataModel(message="update ok")
 
