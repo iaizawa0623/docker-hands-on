@@ -4,8 +4,8 @@ FROM python:3.10.5
 # 作業フォルダを指定
 WORKDIR /
 
-# プログラムと依存関係パッケージファイルをコピー
-COPY main.py requirements.txt /
+# app/をルートにコピー
+COPY app/ /
 
 # 依存関係パッケージをインストール
 RUN pip install -r /requirements.txt

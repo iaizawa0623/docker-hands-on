@@ -1,5 +1,6 @@
 # 静的ホスト
 
+import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
@@ -8,12 +9,12 @@ from fastapi.responses import RedirectResponse
 app = FastAPI()
 
 # staticフォルダ内のファイルを静的コンテンツとして配信
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/www", StaticFiles(directory="/www"))
 
-# ルートアクセス時にindexファイルにリダイレクト
+# ルートアクセス時にindex.htmlにリダイレクト
 @app.get("/")
 async def root_handler():
-    return RedirectResponse("/static/index.html")
+    return RedirectResponse("/www/index.html")
 
 # ASGI サーバを起動
 if __name__ == "__main__":
