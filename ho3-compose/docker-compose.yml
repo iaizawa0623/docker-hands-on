@@ -2,7 +2,7 @@ version: "3"
 services:
   api:
     build: .
-    image: 677889882207.dkr.ecr.ap-northeast-1.amazonaws.com/sample-compose-api
+    #image: 677889882207.dkr.ecr.ap-northeast-1.amazonaws.com/sample-compose-api
     ports:
       - 80:80
   mongo:
