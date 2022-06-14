@@ -1,4 +1,4 @@
-# 静的ホスト
+# 静的ホスティング
 
 import uvicorn
 from fastapi import FastAPI
