@@ -1,5 +1,5 @@
 # ベースイメージを指定
-FROM python:3.10.5-alpine3.15
+FROM python:3.10.5
 
 # 作業フォルダを指定
 WORKDIR /
@@ -14,4 +14,4 @@ RUN pip install -r /requirements.txt
 EXPOSE 80
 
 # プログラムを実行
-CMD [ "uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "80" ]
+ENTRYPOINT [ "python3", "main.py" ]
