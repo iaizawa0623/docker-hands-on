@@ -1,5 +1,5 @@
 # ベースイメージを指定
-FROM python:3.10.5-apline
+FROM python:3.10-buster
 
 # 作業フォルダを指定
 WORKDIR /
